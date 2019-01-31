@@ -13,7 +13,6 @@ Variable-Density-Based Spatial Clustering of Applications with Noise (V-DBSCAN) 
 
 If you have used this codebase in a scientific publication and wish to cite it, please refer to the following:
 
-.. code:: bibtex
   @article{pla2019finding,
     title={Finding landmarks within settled areas using hierarchical density-based clustering and meta-data from publicly available images},
     author={Pla-Sacrist{\'a}n, Eduardo and Gonz{\'a}lez-D{\'\i}az, Iv{\'a}n and Mart{\'\i}nez-Cort{\'e}s, Tom{\'a}s and D{\'\i}az-de-Mar{\'\i}a, Fernando},
