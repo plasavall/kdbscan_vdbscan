@@ -22,7 +22,7 @@ class VDBSCAN():
     def __init__(self,
                  kappa = 0.0017,
                  max_level=60,
-                 max_non_changes=6,
+                 max_non_changes=8,
                  metric = 'default', # euclidean
                  isol = True):
         self.kappa = kappa

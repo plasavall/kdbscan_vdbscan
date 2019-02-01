@@ -26,7 +26,7 @@ from sklearn.neighbors import KNeighborsClassifier
 
 class KDBSCAN():
     
-    def __init__(self, h = 0.35, t = 0.25, metric = euclidean):
+    def __init__(self, h = 0.35, t = 0.4, metric = euclidean):
         self.h = h
         self.t = t
         self.dist_p2p = metric
@@ -36,7 +36,7 @@ class KDBSCAN():
                   eta = 0.1,
                   relevant_features = 'all',
                   return_kde = False,
-                  verbose = 0):
+                  verbose = 1):
         self.X = X
         if verbose:
             print '-------------------------------------------------------'
@@ -68,7 +68,7 @@ class KDBSCAN():
         # Keep only the centroids that satisfy t
         centroid_idx = centroid_idx[kept,:]
         if np.sum(kept) == 1:
-            self.y = np.zeros(X.shape[0])
+            self.labels_ = np.zeros(X.shape[0])
         else:
             # Get the coordinates of the valid peaks
             centroids = get_coords_from_idx(centroid_idx, xmin, xmax, ymin, ymax)
@@ -84,13 +84,13 @@ class KDBSCAN():
             # Sort by size (and avoid numbering gaps)
             y = sort_by_size(y)
             # Assign labels to all samples (input dataset)
-            self.y = assign_labels(X[:,relevant_features],Xu,y)
+            self.labels_ = assign_labels(X[:,relevant_features],Xu,y)
         if verbose:
             print 'Assignment Algorithm complete!'
             print '-------------------------------------------------------'
         if return_kde:
             return {'X':self.X,
-                    'y':self.y,
+                    'y':self.labels_,
                     'Z':Z,
                     'centroids':centroids_all,
                     'kept':kept,
@@ -354,7 +354,10 @@ def sort_by_size(disordered_labels):
     return new_labels
 
 #=============================================================================#
-            
+# Plot the Kernel Density Estim., the points (coloured differently depending
+# on their output cluster assignment) and the valid peaks (purple triangles) 
+# as well as the discarded peaks (black triangles). 
+#=============================================================================#
 def plot_kdbscan_results(kde, fig_num=1, plot_samples=True):
     import matplotlib.pyplot as plt
 
@@ -363,7 +366,6 @@ def plot_kdbscan_results(kde, fig_num=1, plot_samples=True):
         centroids = kde['centroids']
         c1 = centroids[:,1]
         c2 = centroids[:,0]
-        
         # Create the figure
         fig = plt.figure(fig_num, figsize=(25,25))
         fig.clf()
@@ -371,12 +373,10 @@ def plot_kdbscan_results(kde, fig_num=1, plot_samples=True):
         ax.set_aspect(1)
         # Plot Gaussian KDE
         ax.imshow(np.rot90(kde['Z']), cmap=plt.cm.gist_earth_r, extent=kde['extent'])
-
         # Plot Peaks (Valid in Magenta)
         for idx in range(centroids.shape[0]):
             if kept[idx]:
                 ax.plot(c1[idx], c2[idx], 'm^', markersize=20)
-                
             else:
                 ax.plot(c1[idx], c2[idx], 'k^', markersize=18)
     # Plot all sampels with subregion labels
