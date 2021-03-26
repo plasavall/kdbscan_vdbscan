@@ -45,7 +45,7 @@ class VDBSCAN():
             print('-------------------------------------------------------')
             print('VDBSCAN Algorithm')
             print('-------------------------------------------------------')
-            print(' Feature Matrix -> ' + str(X.shape[0]) + 'x' + str(X.shape[1])
+            print(' Feature Matrix -> ' + str(X.shape[0]) + 'x' + str(X.shape[1]))
             print('-------------------------------------------------------')
             print(' - Kappa   = ' + str(self.kappa))
             print(' · Eps_0   = ' + str(eps_0))
