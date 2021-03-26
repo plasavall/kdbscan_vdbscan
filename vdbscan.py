@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Created on Tue Jul 18 11:37:25 2017
@@ -42,16 +42,16 @@ class VDBSCAN():
                  eta=0.1,
                  verbose=1):
         if verbose:
-            print '-------------------------------------------------------'
-            print 'VDBSCAN Algorithm'
-            print '-------------------------------------------------------'
-            print ' Feature Matrix -> ' + str(X.shape[0]) + 'x' + str(X.shape[1])
-            print '-------------------------------------------------------'
-            print ' - Kappa   = ' + str(self.kappa)
-            print ' · Eps_0   = ' + str(eps_0)
-            print ' · Eta_Eps = ' + str(eta)
-            print '-------------------------------------------------------'
-            print 'Hierarchical iterations in progress...'   
+            print('-------------------------------------------------------')
+            print('VDBSCAN Algorithm')
+            print('-------------------------------------------------------')
+            print(' Feature Matrix -> ' + str(X.shape[0]) + 'x' + str(X.shape[1])
+            print('-------------------------------------------------------')
+            print(' - Kappa   = ' + str(self.kappa))
+            print(' · Eps_0   = ' + str(eps_0))
+            print(' · Eta_Eps = ' + str(eta))
+            print('-------------------------------------------------------')
+            print('Hierarchical iterations in progress...')
         self.eta        = eta
         # Compute eps_0 as 20% of the mean distances between points in dataset
         if eps_0 == 'auto':
@@ -72,27 +72,27 @@ class VDBSCAN():
             self.eps = self.eps * (1 - self.eta)
             current_level += 1
             if verbose > 1:
-                print 'Current level: ' + str(current_level) + '/' + str(self.max_level) + \
-                      ' - eps = ' + str(self.eps) + ' '
+                print('Current level: ' + str(current_level) + '/' + str(self.max_level) + \
+                      ' - eps = ' + str(self.eps) + ' ')
             elif verbose > 2:
-                print
-                print '\n############################################################'
-                print 'Current level: ' + str(current_level) + '/' + str(self.max_level) + \
-                      ' - eps = ' + str(self.eps) + ' '
+                print()
+                print('\n############################################################')
+                print('Current level: ' + str(current_level) + '/' + str(self.max_level) + \
+                      ' - eps = ' + str(self.eps) + ' ')
                 if non_changes == 0:
                     if current_level > 1:
-                        print 'Structure was altered in the last level!'
+                        print('Structure was altered in the last level!')
                 elif non_changes == 1:
-                    print 'Structured unchanged in the last level.'
+                    print('Structured unchanged in the last level.')
                 else:
-                    print 'Structure unchanged in the last ' + str(non_changes) + ' levels.'
-                print
+                    print('Structure unchanged in the last ' + str(non_changes) + ' levels.')
+                print()
             
             for i in range(self.n_clusters):
                 if verbose > 2:
-                    print 'Clusters analysed: ' + str(i) + '/' + \
+                    print('Clusters analysed: ' + str(i) + '/' + \
                               str(self.n_clusters) + ' - ' + \
-                              str(100 * i / self.n_clusters) + '%'
+                              str(100 * i / self.n_clusters) + '%')
                     
                 Xcluster, this_idx = get_cluster(X = X, labels = self.y, clusterID = i)
                 
@@ -120,7 +120,7 @@ class VDBSCAN():
                     y_new[this_idx]      = this_labels
                     y_new = sort_by_size(y_new)
             if verbose > 2:
-                print 'Clusters analysed: ' + str(i+1) + '/' + str(self.n_clusters) + ' - 100%'
+                print('Clusters analysed: ' + str(i+1) + '/' + str(self.n_clusters) + ' - 100%')
             n_clusters_before = len(set(y_new)) - (1 if -1 in y_new else 0)
             y_new = sort_by_size(y_new)
             y_new = prune_clusters(thisX = X, labels = y_new)
@@ -129,7 +129,7 @@ class VDBSCAN():
             if np.array_equal(self.y, y_new):
                 non_changes += 1
                 if verbose > 1:
-                    print 'Unchanged levels: ' + str(non_changes)
+                    print('Unchanged levels: ' + str(non_changes))
                 if non_changes >= self.max_non_changes:
                     finished = True
             else:
@@ -143,33 +143,33 @@ class VDBSCAN():
                 n_noise = np.sum(self.y==-1)    
                 ncluster_ev.append(self.n_clusters)
                 if verbose > 2:
-                    print '\nNumber of clusters after level: ' +\
+                    print('\nNumber of clusters after level: ' +\
                           str(self.n_clusters) + ' // ' +\
                           str(n_clusters_before - self.n_clusters) +\
-                          ' small clusters pruned.'  
-                    print 'Noise samples after level: ' + str(n_noise) +\
-                          '(' + str(100*n_noise/self.y.shape[0]) + '%)'
-                    print '\n############################################################'
+                          ' small clusters pruned.')
+                    print('Noise samples after level: ' + str(n_noise) +\
+                          '(' + str(100*n_noise/self.y.shape[0]) + '%)')
+                    print('\n############################################################')
                     
                 elif verbose > 1:
-                    print 'Nº of clusters after level: ' +\
+                    print('Nº of clusters after level: ' +\
                           str(self.n_clusters) + ' // ' +\
                           str(n_clusters_before - self.n_clusters) +\
                           ' pruned // ' +\
-                          'Noise at ' + str(100*n_noise/self.y.shape[0]) + '%'
+                          'Noise at ' + str(100*n_noise/self.y.shape[0]) + '%')
         # Set final labels (order by size and remove gaps)
         self.labels_ = sort_by_size(self.y)
         if verbose > 1:
-            print '\n############################################################'
-            print '          Evolution of number of clusters:'
-            print '############################################################\n'
+            print('\n############################################################')
+            print('          Evolution of number of clusters:')
+            print('############################################################\n')
             tplt.plot(ncluster_ev, plot_height=15, plot_char='.')
-            print
+            print()
         if verbose:
-            print '-------------------------------------------------------'
-            print 'Algorithm complete!'
-            print '-------------------------------------------------------'
-            print '-------------------------------------------------------'
+            print('-------------------------------------------------------')
+            print('Algorithm complete!')
+            print('-------------------------------------------------------')
+            print('-------------------------------------------------------')
         return self
 
     def separation_criterion(self, X, labels, isolation = 0.5, kappa = 0.50, verbose = False):
