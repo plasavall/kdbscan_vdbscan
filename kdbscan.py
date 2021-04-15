@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Created on Tue Mar  6 14:54:00 2018
@@ -39,17 +39,17 @@ class KDBSCAN():
                   verbose = 1):
         self.X = X
         if verbose:
-            print '-------------------------------------------------------'
-            print 'KDBSCAN Algorithm'
-            print '-------------------------------------------------------'
-            print ' Feature Matrix -> ' + str(X.shape[0]) + 'x' + str(X.shape[1])
-            print '-------------------------------------------------------'
-            print ' - h     = ' + str(self.h)
-            print ' - t     = ' + str(self.t)
-            print ' · eps_0 = ' + str(eps_0)
-            print ' · eta   = ' + str(eta) 
-            print '-------------------------------------------------------'
-            print 'Kernel Density Estimation in progress...'    
+            print('-------------------------------------------------------')
+            print('KDBSCAN Algorithm')
+            print('-------------------------------------------------------')
+            print(' Feature Matrix -> ' + str(X.shape[0]) + 'x' + str(X.shape[1]))
+            print('-------------------------------------------------------')
+            print(' - h     = ' + str(self.h))
+            print(' - t     = ' + str(self.t))
+            print(' · eps_0 = ' + str(eps_0))
+            print(' · eta   = ' + str(eta))
+            print('-------------------------------------------------------')
+            print('Kernel Density Estimation in progress...')
         # Declare features used for clustering assignment
         if relevant_features == 'all':
             relevant_features = range(X.shape[1])        
@@ -73,10 +73,10 @@ class KDBSCAN():
             # Get the coordinates of the valid peaks
             centroids = get_coords_from_idx(centroid_idx, xmin, xmax, ymin, ymax)
             if verbose:
-                print 'Kernel Density Estimation in complete!'
-                print 'Valid Centroids: '+str(np.sum(kept))+'/'+str(len(kept))
-                print '-------------------------------------------------------'
-                print 'Assignment Algorithm in progress...'
+                print('Kernel Density Estimation in complete!')
+                print('Valid Centroids: '+str(np.sum(kept))+'/'+str(len(kept)))
+                print('-------------------------------------------------------')
+                print('Assignment Algorithm in progress...')
             # Assign a subregion label to each sample (considering ALL peaks)
             assignment_phase = AssA(centroids.shape[0], metric = self.dist_p2p)
             assignment_phase.fit(Xu,centroids, eps_0 = eps_0, eta=eta, verbose = verbose)
@@ -86,8 +86,8 @@ class KDBSCAN():
             # Assign labels to all samples (input dataset)
             self.labels_ = assign_labels(X[:,relevant_features],Xu,y)
         if verbose:
-            print 'Assignment Algorithm complete!'
-            print '-------------------------------------------------------'
+            print('Assignment Algorithm complete!')
+            print('-------------------------------------------------------')
         if return_kde:
             return {'X':self.X,
                     'y':self.labels_,
@@ -138,12 +138,12 @@ class AssA():
             Q = list(np.where(y==self.current_cluster)[0]) 
             if verbose > 1:
                 if self.current_cluster == 0:
-                    print '--------------------------------'
-                print
-                print 'Current EPS:     ' + str(self.eps)
-                print 'Nº unclassified: ' + str(np.sum(y==-2))
-                print 'Current cluster: ' + str(self.current_cluster)
-                print 'Size:            ' + str(len(Q))
+                    print('--------------------------------')
+                print()
+                print('Current EPS:     ' + str(self.eps))
+                print('Nº unclassified: ' + str(np.sum(y==-2)))
+                print('Current cluster: ' + str(self.current_cluster))
+                print('Size:            ' + str(len(Q)))
             
             # Traverse the candidates
             while (len(Q) > 0):
